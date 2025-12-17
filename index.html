@@ -156,6 +156,20 @@
             font-size: 3em;
             color: #667eea;
             font-weight: bold;
+            transition: transform 0.2s ease-out;
+        }
+
+        .counter-value.animate {
+            animation: counterPulse 0.2s ease-out;
+        }
+
+        @keyframes counterPulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.2);
+            }
         }
 
         .counter-buttons {
@@ -300,21 +314,23 @@
             const counterElement = document.getElementById('counterValue');
             counterElement.textContent = counter;
             
-            // Add animation effect using CSS transition
-            counterElement.style.transition = 'transform 0.2s ease-out';
-            counterElement.style.transform = 'scale(1.2)';
-            setTimeout(() => {
-                counterElement.style.transform = 'scale(1)';
-            }, 200);
+            // Add animation effect using CSS animation
+            counterElement.classList.remove('animate');
+            // Force reflow to restart animation
+            void counterElement.offsetWidth;
+            counterElement.classList.add('animate');
         }
 
         function submitForm() {
-            const name = document.getElementById('nameInput').value;
-            const message = document.getElementById('messageInput').value;
+            const name = document.getElementById('nameInput').value.trim();
+            const message = document.getElementById('messageInput').value.trim();
             const resultDiv = document.getElementById('result');
 
             if (!name || !message) {
                 resultDiv.innerHTML = '<strong>⚠️ Error:</strong> Please fill in all fields!';
+                resultDiv.style.borderLeftColor = '#dc3545';
+            } else if (name.length > 100 || message.length > 1000) {
+                resultDiv.innerHTML = '<strong>⚠️ Error:</strong> Input is too long!';
                 resultDiv.style.borderLeftColor = '#dc3545';
             } else {
                 resultDiv.innerHTML = `

@@ -107,6 +107,11 @@
             transform: translateY(0);
         }
 
+        .button:focus {
+            outline: 2px solid #667eea;
+            outline-offset: 2px;
+        }
+
         .button-secondary {
             background: #f0f0f0;
             color: #333;
@@ -174,6 +179,12 @@
             text-align: center;
             transition: transform 0.3s, box-shadow 0.3s;
             cursor: pointer;
+            outline: none;
+        }
+
+        .feature-card:focus {
+            outline: 2px solid #667eea;
+            outline-offset: 2px;
         }
 
         .feature-card:hover {
@@ -222,17 +233,17 @@
             </p>
 
             <div class="feature-grid">
-                <div class="feature-card" onclick="showFeature('design')">
+                <div class="feature-card" onclick="showFeature('design')" onkeydown="handleCardKeydown(event, 'design')" tabindex="0" role="button" aria-label="Modern Design feature">
                     <div class="feature-icon">🎨</div>
                     <div class="feature-title">Modern Design</div>
                     <div class="feature-desc">Beautiful gradients and animations</div>
                 </div>
-                <div class="feature-card" onclick="showFeature('interactive')">
+                <div class="feature-card" onclick="showFeature('interactive')" onkeydown="handleCardKeydown(event, 'interactive')" tabindex="0" role="button" aria-label="Interactive feature">
                     <div class="feature-icon">⚡</div>
                     <div class="feature-title">Interactive</div>
                     <div class="feature-desc">Engaging user experience</div>
                 </div>
-                <div class="feature-card" onclick="showFeature('responsive')">
+                <div class="feature-card" onclick="showFeature('responsive')" onkeydown="handleCardKeydown(event, 'responsive')" tabindex="0" role="button" aria-label="Responsive feature">
                     <div class="feature-icon">📱</div>
                     <div class="feature-title">Responsive</div>
                     <div class="feature-desc">Works on all devices</div>
@@ -289,11 +300,14 @@
             const counterElement = document.getElementById('counterValue');
             counterElement.textContent = counter;
             
-            // Add animation effect
+            // Add animation effect using CSS transition
+            counterElement.style.transition = 'transform 0.2s ease-out';
             counterElement.style.transform = 'scale(1.2)';
-            setTimeout(() => {
-                counterElement.style.transform = 'scale(1)';
-            }, 200);
+            requestAnimationFrame(() => {
+                setTimeout(() => {
+                    counterElement.style.transform = 'scale(1)';
+                }, 200);
+            });
         }
 
         function submitForm() {
@@ -331,6 +345,12 @@
         }
 
         function showFeature(feature) {
+            const featureNames = {
+                design: 'DESIGN',
+                interactive: 'INTERACTIVE',
+                responsive: 'RESPONSIVE'
+            };
+            
             const messages = {
                 design: 'Modern gradients, smooth animations, and a clean interface!',
                 interactive: 'Click, type, and interact with various elements!',
@@ -338,15 +358,30 @@
             };
 
             const resultDiv = document.getElementById('result');
-            resultDiv.innerHTML = `<strong>ℹ️ ${feature.toUpperCase()}</strong><br>${messages[feature]}`;
+            const featureName = document.createElement('strong');
+            featureName.textContent = `ℹ️ ${featureNames[feature] || 'FEATURE'}`;
+            
+            const messageText = document.createTextNode(messages[feature] || '');
+            
+            resultDiv.innerHTML = '';
+            resultDiv.appendChild(featureName);
+            resultDiv.appendChild(document.createElement('br'));
+            resultDiv.appendChild(messageText);
+            
             resultDiv.style.borderLeftColor = '#667eea';
             resultDiv.classList.add('show');
         }
 
+        function handleCardKeydown(event, feature) {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                showFeature(feature);
+            }
+        }
+
         // Add smooth transitions
         document.addEventListener('DOMContentLoaded', function() {
-            const counterValue = document.getElementById('counterValue');
-            counterValue.style.transition = 'transform 0.2s ease-out';
+            // Transitions are now handled in the updateCounter function
         });
     </script>
 </body>

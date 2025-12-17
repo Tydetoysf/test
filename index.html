@@ -303,11 +303,9 @@
             // Add animation effect using CSS transition
             counterElement.style.transition = 'transform 0.2s ease-out';
             counterElement.style.transform = 'scale(1.2)';
-            requestAnimationFrame(() => {
-                setTimeout(() => {
-                    counterElement.style.transform = 'scale(1)';
-                }, 200);
-            });
+            setTimeout(() => {
+                counterElement.style.transform = 'scale(1)';
+            }, 200);
         }
 
         function submitForm() {
@@ -378,11 +376,6 @@
                 showFeature(feature);
             }
         }
-
-        // Add smooth transitions
-        document.addEventListener('DOMContentLoaded', function() {
-            // Transitions are now handled in the updateCounter function
-        });
     </script>
 </body>
 </html>
